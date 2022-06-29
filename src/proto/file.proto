@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package file;
+
+option go_package = "src/proto";
+
+service FileService {
+  rpc UploadImage(UploadImageRequest) returns (UploadImageResponse){}
+  rpc UploadFile(UploadFileRequest) returns(UploadFileResponse) {}
+}
+
+// Upload Image
+
+message UploadImageRequest{
+  bytes data = 1;
+}
+
+message UploadImageResponse{
+  string url = 1;
+}
+
+// Upload File
+
+message UploadFileRequest{
+  bytes data = 1;
+}
+
+message UploadFileResponse{
+  string url = 1;
+}
