@@ -13,14 +13,26 @@ import (
 )
 
 type Client struct {
-	client *storage.Client
-	ctx    context.Context
-	conf   config.GCS
+	ctx  context.Context
+	conf config.GCS
 }
+
+const SignUrlExpiresIn = 15
 
 func NewClient(conf config.GCS) *Client {
 	ctx := context.Background()
-	client, err := storage.NewClient(ctx, option.WithCredentialsJSON(conf.ServiceAccountJSON))
+	return &Client{
+		ctx:  ctx,
+		conf: conf,
+	}
+}
+
+func (c *Client) Upload(files []byte, filename string) error {
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(c.ctx, 50*time.Second)
+	defer cancel()
+
+	client, err := storage.NewClient(ctx, option.WithCredentialsJSON(c.conf.ServiceAccountJSON))
 	if err != nil {
 		log.Error().
 			Err(err).
@@ -28,33 +40,11 @@ func NewClient(conf config.GCS) *Client {
 			Str("module", "gcs client").
 			Msg("Cannot create google cloud storage client")
 	}
-
-	return &Client{
-		client: client,
-		ctx:    ctx,
-		conf:   conf,
-	}
-}
-
-func (c *Client) Upload(files []byte, filename string) error {
-	ctx := context.Background()
-	client, err := storage.NewClient(ctx, option.WithCredentialsJSON(c.conf.ServiceAccountJSON))
-	if err != nil {
-		log.Error().
-			Err(err).
-			Str("service", "file").
-			Str("module", "gcs client").
-			Msg("Cannot create client")
-		return errors.New("Cannot create client")
-	}
-
 	defer client.Close()
-	ctx, cancel := context.WithTimeout(c.ctx, 50*time.Second)
-	defer cancel()
 
 	buf := bytes.NewBuffer(files)
 
-	wc := c.client.Bucket(c.conf.BucketName).Object(filename).NewWriter(ctx)
+	wc := client.Bucket(c.conf.BucketName).Object(filename).NewWriter(ctx)
 	wc.ChunkSize = 0
 
 	if _, err := io.Copy(wc, buf); err != nil {
@@ -74,14 +64,15 @@ func (c *Client) Upload(files []byte, filename string) error {
 }
 
 func (c *Client) GetSignedUrl(filename string) (string, error) {
-	defer c.client.Close()
-
-	url, err := storage.SignedURL(c.conf.BucketName, filename, &storage.SignedURLOptions{
+	ops := storage.SignedURLOptions{
 		GoogleAccessID: c.conf.ServiceAccountEmail,
-		PrivateKey:     []byte(c.conf.ServiceAccountKey),
+		PrivateKey:     c.conf.ServiceAccountKey,
 		Method:         "GET",
-		Expires:        time.Now().Add(48 * time.Hour),
-	})
+		Expires:        time.Now().Add(SignUrlExpiresIn * time.Minute),
+		Scheme:         storage.SigningSchemeV4,
+	}
+
+	url, err := storage.SignedURL(c.conf.BucketName, filename, &ops)
 	if err != nil {
 		return "", err
 	}
