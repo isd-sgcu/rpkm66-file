@@ -253,5 +253,5 @@ func (t *GCSServiceTest) TestGetSignedUrlNotFound() {
 
 	assert.True(t.T(), ok)
 	assert.Nil(t.T(), actual)
-	assert.Equal(t.T(), codes.Unavailable, st.Code())
+	assert.Equal(t.T(), codes.NotFound, st.Code())
 }
