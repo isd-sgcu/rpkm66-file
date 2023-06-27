@@ -3,6 +3,9 @@ package gcs
 import (
 	"context"
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/bxcodec/faker/v3"
 	"github.com/go-redis/redis/v8"
 	dto "github.com/isd-sgcu/rnkm65-file/src/app/dto/file"
@@ -11,14 +14,12 @@ import (
 	cMock "github.com/isd-sgcu/rnkm65-file/src/mocks/cache"
 	fMock "github.com/isd-sgcu/rnkm65-file/src/mocks/file"
 	mock "github.com/isd-sgcu/rnkm65-file/src/mocks/gcs"
-	"github.com/isd-sgcu/rnkm65-file/src/proto"
+	proto "github.com/isd-sgcu/rpkm66-go-proto/rpkm66/file/file/v1"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"strings"
-	"testing"
 )
 
 type GCSServiceTest struct {
