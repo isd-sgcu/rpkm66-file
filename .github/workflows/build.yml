@@ -1,0 +1,57 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - beta
+      - dev
+
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    outputs:
+      BRANCH: ${{ steps.branch.outputs.BRANCH }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to the Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup git credential
+        env:
+          GO_PROTO_DEPLOY_KEY: ${{ secrets.GO_PROTO_DEPLOY_KEY }}
+        run: |
+          mkdir -p /home/runner/.ssh && chmod 700 /home/runner/.ssh
+          echo $GO_PROTO_DEPLOY_KEY > /home/runner/.ssh/id_rsa
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }},${{ env.IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
+          secret-files: |
+            "sshKey=/home/runner/.ssh/id_rsa"

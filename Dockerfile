@@ -1,34 +1,30 @@
 # Base Image
-FROM golang:1.18.3-alpine3.16 as base
+FROM golang:1.20.5-bullseye as base
 
 # Working directory
 WORKDIR /app
+
+# Setup credential
+RUN git config --global url.ssh://git@github.com/.insteadOf https://github.com/ && mkdir /root/.ssh && chmod 700 /root/.ssh && ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+ENV GOPRIVATE=github.com/isd-sgcu/*
 
 # Copy go.mod and go.sum files
 COPY go.mod go.sum ./
 
 # Download dependencies
-RUN go mod download
+RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true cat /root/.ssh/id_rsa && go mod download
 
 # Copy the source code
 COPY . .
 
-# Adding the grpc_health_probe
-RUN GRPC_HEALTH_PROBE_VERSION=v0.3.1 && \
-    wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
-    chmod +x /bin/grpc_health_probe
-
 # Build the application
-RUN go build -o server ./src/.
-
+RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go build -o server ./src/.
 # Create master image
 FROM alpine AS master
 
 # Working directory
 WORKDIR /app
-
-# Copy grpc_heath_prob
-COPY --from=base /bin/grpc_health_probe ./
 
 # Copy execute file
 COPY --from=base /app/server ./
