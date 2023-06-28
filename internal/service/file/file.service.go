@@ -1,47 +1,34 @@
-package gcs
+package file
 
 import (
 	"context"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/isd-sgcu/rpkm66-file/cfgldr"
-	"github.com/isd-sgcu/rpkm66-file/constant/file"
+	fileConst "github.com/isd-sgcu/rpkm66-file/constant/file"
 	dto "github.com/isd-sgcu/rpkm66-file/internal/dto/file"
 	entity "github.com/isd-sgcu/rpkm66-file/internal/entity/file"
 	proto "github.com/isd-sgcu/rpkm66-file/internal/proto/rpkm66/file/file/v1"
 	"github.com/isd-sgcu/rpkm66-file/internal/utils"
+	"github.com/isd-sgcu/rpkm66-file/pkg/client/gcs"
+	"github.com/isd-sgcu/rpkm66-file/pkg/repository/cache"
+	"github.com/isd-sgcu/rpkm66-file/pkg/repository/file"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-type Service struct {
+type serviceImpl struct {
 	proto.UnimplementedFileServiceServer
 	conf       cfgldr.GCS
 	ttl        int
-	client     IClient
-	repository IRepository
-	cacheRepo  ICacheRepository
+	client     gcs.Client
+	repository file.Repository
+	cacheRepo  cache.CacheRepository
 }
 
-type IClient interface {
-	Upload([]byte, string) error
-	GetSignedUrl(string) (string, error)
-}
-
-type IRepository interface {
-	FindByOwnerID(string, *entity.File) error
-	CreateOrUpdate(*entity.File) error
-	Delete(string) error
-}
-
-type ICacheRepository interface {
-	SaveCache(string, interface{}, int) error
-	GetCache(string, interface{}) error
-}
-
-func NewService(conf cfgldr.GCS, ttl int, client IClient, repository IRepository, cacheRepo ICacheRepository) *Service {
-	return &Service{
+func NewService(conf cfgldr.GCS, ttl int, client gcs.Client, repository file.Repository, cacheRepo cache.CacheRepository) *serviceImpl {
+	return &serviceImpl{
 		conf:       conf,
 		ttl:        ttl,
 		client:     client,
@@ -50,12 +37,12 @@ func NewService(conf cfgldr.GCS, ttl int, client IClient, repository IRepository
 	}
 }
 
-func (s *Service) Upload(_ context.Context, req *proto.UploadRequest) (*proto.UploadResponse, error) {
+func (s *serviceImpl) Upload(_ context.Context, req *proto.UploadRequest) (*proto.UploadResponse, error) {
 	if req.Data == nil {
 		return nil, status.Error(codes.InvalidArgument, "File cannot be empty")
 	}
 
-	filename, err := utils.GetObjectName(req.Filename, s.conf.Secret, file.Type(req.Type))
+	filename, err := utils.GetObjectName(req.Filename, s.conf.Secret, fileConst.Type(req.Type))
 	if err != nil {
 		log.Error().Err(err).
 			Str("service", "file").
@@ -123,7 +110,7 @@ func (s *Service) Upload(_ context.Context, req *proto.UploadRequest) (*proto.Up
 	return &proto.UploadResponse{Url: url}, nil
 }
 
-func (s *Service) GetSignedUrl(_ context.Context, req *proto.GetSignedUrlRequest) (*proto.GetSignedUrlResponse, error) {
+func (s *serviceImpl) GetSignedUrl(_ context.Context, req *proto.GetSignedUrlRequest) (*proto.GetSignedUrlResponse, error) {
 	cachedFile := &dto.CacheFile{}
 	err := s.cacheRepo.GetCache(req.UserId, cachedFile)
 	if err == nil {

@@ -3,19 +3,20 @@ package cache
 import (
 	"context"
 	"encoding/json"
-	"github.com/go-redis/redis/v8"
 	"time"
+
+	"github.com/go-redis/redis/v8"
 )
 
-type Repository struct {
+type repositoryImpl struct {
 	client *redis.Client
 }
 
-func NewRepository(client *redis.Client) *Repository {
-	return &Repository{client: client}
+func NewRepository(client *redis.Client) *repositoryImpl {
+	return &repositoryImpl{client: client}
 }
 
-func (r *Repository) SaveCache(key string, value interface{}, ttl int) (err error) {
+func (r *repositoryImpl) SaveCache(key string, value interface{}, ttl int) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -27,7 +28,7 @@ func (r *Repository) SaveCache(key string, value interface{}, ttl int) (err erro
 	return r.client.Set(ctx, key, v, time.Duration(ttl)*time.Second).Err()
 }
 
-func (r *Repository) GetCache(key string, value interface{}) (err error) {
+func (r *repositoryImpl) GetCache(key string, value interface{}) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

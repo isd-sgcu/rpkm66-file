@@ -14,9 +14,9 @@ import (
 	gcsClt "github.com/isd-sgcu/rpkm66-file/client/gcs"
 	"github.com/isd-sgcu/rpkm66-file/database"
 	proto "github.com/isd-sgcu/rpkm66-file/internal/proto/rpkm66/file/file/v1"
-	"github.com/isd-sgcu/rpkm66-file/internal/repository/cache"
-	fRepo "github.com/isd-sgcu/rpkm66-file/internal/repository/file"
-	gcsSrv "github.com/isd-sgcu/rpkm66-file/internal/service/gcs"
+	"github.com/isd-sgcu/rpkm66-file/pkg/repository/cache"
+	fRepo "github.com/isd-sgcu/rpkm66-file/pkg/repository/file"
+	fileSvc "github.com/isd-sgcu/rpkm66-file/pkg/service/file"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
@@ -118,7 +118,7 @@ func main() {
 	fileRepo := fRepo.NewRepository(db)
 
 	gcsClient := gcsClt.NewClient(conf.GCS)
-	fileSrv := gcsSrv.NewService(conf.GCS, conf.App.CacheTTL, gcsClient, fileRepo, cacheRepo)
+	fileSrv := fileSvc.NewFileService(conf.GCS, conf.App.CacheTTL, gcsClient, fileRepo, cacheRepo)
 
 	grpcServer := grpc.NewServer(grpc.MaxRecvMsgSize(conf.App.MaxFileSize * 1024 * 1024))
 

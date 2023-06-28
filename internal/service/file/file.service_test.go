@@ -1,4 +1,4 @@
-package gcs
+package file
 
 import (
 	"context"
