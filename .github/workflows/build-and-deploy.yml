@@ -1,10 +1,9 @@
-name: Build
+name: Build and deploy
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - main
       - beta
       - dev
 
@@ -57,3 +56,33 @@ jobs:
           cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
           secret-files: |
             "sshKey=/home/runner/.ssh/id_rsa"
+
+  deploy:
+    name: Deploy to deploys.app
+    runs-on: ubuntu-latest
+
+    needs:
+      - build
+
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - uses: deploys-app/deploys-action@v1
+        with:
+          project: rpkm66
+          location: gke.cluster-rcf2
+          name: rpkm66-file-${{ steps.extract_branch.outputs.branch }}
+          image: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        env:
+          DEPLOYS_AUTH_USER: ${{ secrets.DEPLOYS_AUTH_USER }}
+          DEPLOYS_AUTH_PASS: ${{ secrets.DEPLOYS_AUTH_PASS }}

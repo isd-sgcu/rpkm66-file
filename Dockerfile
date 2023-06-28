@@ -19,7 +19,7 @@ RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go mod 
 COPY . .
 
 # Build the application
-RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go build -o server ./.
+RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go build -o server ./...
 # Create master image
 FROM alpine AS master
 
