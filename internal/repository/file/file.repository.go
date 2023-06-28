@@ -1,7 +1,7 @@
 package file
 
 import (
-	"github.com/isd-sgcu/rpkm66-file/internal/model/file"
+	"github.com/isd-sgcu/rpkm66-file/internal/entity/file"
 	"gorm.io/gorm"
 )
 

@@ -2,7 +2,7 @@ package seed
 
 import (
 	"github.com/bxcodec/faker/v4"
-	"github.com/isd-sgcu/rpkm66-file/internal/model/file"
+	"github.com/isd-sgcu/rpkm66-file/internal/entity/file"
 )
 
 func (s Seed) UserSeed1655751437484() error {

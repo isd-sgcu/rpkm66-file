@@ -7,7 +7,7 @@ import (
 	"github.com/isd-sgcu/rpkm66-file/cfgldr"
 	"github.com/isd-sgcu/rpkm66-file/constant/file"
 	dto "github.com/isd-sgcu/rpkm66-file/internal/dto/file"
-	model "github.com/isd-sgcu/rpkm66-file/internal/model/file"
+	entity "github.com/isd-sgcu/rpkm66-file/internal/entity/file"
 	proto "github.com/isd-sgcu/rpkm66-file/internal/proto/rpkm66/file/file/v1"
 	"github.com/isd-sgcu/rpkm66-file/internal/utils"
 	"github.com/rs/zerolog/log"
@@ -30,8 +30,8 @@ type IClient interface {
 }
 
 type IRepository interface {
-	FindByOwnerID(string, *model.File) error
-	CreateOrUpdate(*model.File) error
+	FindByOwnerID(string, *entity.File) error
+	CreateOrUpdate(*entity.File) error
 	Delete(string) error
 }
 
@@ -74,7 +74,7 @@ func (s *Service) Upload(_ context.Context, req *proto.UploadRequest) (*proto.Up
 		return nil, status.Error(codes.Unavailable, "Cannot connect to google cloud storage")
 	}
 
-	f := &model.File{
+	f := &entity.File{
 		Filename: filename,
 		OwnerID:  req.UserId,
 		Tag:      int(req.Tag),
@@ -139,7 +139,7 @@ func (s *Service) GetSignedUrl(_ context.Context, req *proto.GetSignedUrlRequest
 		return nil, status.Error(codes.Unavailable, "Error while connecting to redis server")
 	}
 
-	f := model.File{}
+	f := entity.File{}
 	err = s.repository.FindByOwnerID(req.UserId, &f)
 	if err != nil {
 		log.Error().

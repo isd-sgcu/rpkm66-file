@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/isd-sgcu/rpkm66-file/cfgldr"
-	"github.com/isd-sgcu/rpkm66-file/internal/model/file"
+	"github.com/isd-sgcu/rpkm66-file/internal/entity/file"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

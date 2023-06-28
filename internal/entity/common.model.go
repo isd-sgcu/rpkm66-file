@@ -1,9 +1,10 @@
-package model
+package entity
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"time"
 )
 
 type Base struct {

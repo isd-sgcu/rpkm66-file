@@ -10,7 +10,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/isd-sgcu/rpkm66-file/cfgldr"
 	dto "github.com/isd-sgcu/rpkm66-file/internal/dto/file"
-	"github.com/isd-sgcu/rpkm66-file/internal/model/file"
+	"github.com/isd-sgcu/rpkm66-file/internal/entity/file"
 	proto "github.com/isd-sgcu/rpkm66-file/internal/proto/rpkm66/file/file/v1"
 	cMock "github.com/isd-sgcu/rpkm66-file/mocks/cache"
 	fMock "github.com/isd-sgcu/rpkm66-file/mocks/file"
