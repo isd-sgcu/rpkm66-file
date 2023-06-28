@@ -27,7 +27,7 @@ FROM alpine AS master
 WORKDIR /app
 
 # Copy execute file
-COPY --from=base /internal/server ./
+COPY --from=base /app/server ./
 
 # Set ENV to production
 ENV GO_ENV production
