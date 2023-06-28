@@ -2,19 +2,21 @@ package gcs
 
 import (
 	"context"
+
 	"github.com/go-redis/redis/v8"
-	dto "github.com/isd-sgcu/rpkm66-file/src/app/dto/file"
-	model "github.com/isd-sgcu/rpkm66-file/src/app/model/file"
-	"github.com/isd-sgcu/rpkm66-file/src/app/utils"
-	"github.com/isd-sgcu/rpkm66-file/src/config"
-	"github.com/isd-sgcu/rpkm66-file/src/constant/file"
-	"github.com/isd-sgcu/rpkm66-file/src/proto"
+	"github.com/isd-sgcu/rpkm66-file/config"
+	"github.com/isd-sgcu/rpkm66-file/constant/file"
+	dto "github.com/isd-sgcu/rpkm66-file/internal/dto/file"
+	model "github.com/isd-sgcu/rpkm66-file/internal/model/file"
+	proto "github.com/isd-sgcu/rpkm66-file/internal/proto/rpkm66/file/file/v1"
+	"github.com/isd-sgcu/rpkm66-file/internal/utils"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 type Service struct {
+	proto.UnimplementedFileServiceServer
 	conf       config.GCS
 	ttl        int
 	client     IClient

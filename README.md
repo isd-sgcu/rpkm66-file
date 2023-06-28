@@ -23,7 +23,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Running
 1. Run `docker-compose up -d` or `make compose-up`
-2. Run `go run ./src/.` or `make server`
+2. Run `go run ./.` or `make server`
 
 ### Compile proto file
 1. Run `make proto`

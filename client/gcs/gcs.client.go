@@ -2,14 +2,15 @@ package gcs
 
 import (
 	"bytes"
-	"cloud.google.com/go/storage"
 	"context"
-	"github.com/isd-sgcu/rpkm66-file/src/config"
+	"io"
+	"time"
+
+	"cloud.google.com/go/storage"
+	"github.com/isd-sgcu/rpkm66-file/config"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/api/option"
-	"io"
-	"time"
 )
 
 type Client struct {

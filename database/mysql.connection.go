@@ -2,11 +2,12 @@ package database
 
 import (
 	"fmt"
-	"github.com/isd-sgcu/rpkm66-file/src/app/model/file"
-	"github.com/isd-sgcu/rpkm66-file/src/config"
+	"strconv"
+
+	"github.com/isd-sgcu/rpkm66-file/config"
+	"github.com/isd-sgcu/rpkm66-file/internal/model/file"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"strconv"
 )
 
 func InitDatabase(conf *config.Database) (db *gorm.DB, err error) {

@@ -19,7 +19,7 @@ RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go mod 
 COPY . .
 
 # Build the application
-RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go build -o server ./src/.
+RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go build -o server ./.
 # Create master image
 FROM alpine AS master
 
@@ -27,7 +27,7 @@ FROM alpine AS master
 WORKDIR /app
 
 # Copy execute file
-COPY --from=base /app/server ./
+COPY --from=base /internal/server ./
 
 # Set ENV to production
 ENV GO_ENV production

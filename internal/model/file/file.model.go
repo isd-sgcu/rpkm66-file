@@ -1,7 +1,7 @@
 package file
 
 import (
-	"github.com/isd-sgcu/rpkm66-file/src/app/model"
+	"github.com/isd-sgcu/rpkm66-file/internal/model"
 )
 
 type File struct {

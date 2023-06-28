@@ -2,9 +2,10 @@ package utils
 
 import (
 	"fmt"
-	"github.com/isd-sgcu/rpkm66-file/src/constant/file"
 	"strings"
 	"time"
+
+	"github.com/isd-sgcu/rpkm66-file/constant/file"
 )
 
 func GetObjectName(filename string, secret string, fileType file.Type) (string, error) {
