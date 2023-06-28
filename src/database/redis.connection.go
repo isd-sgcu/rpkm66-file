@@ -2,7 +2,7 @@ package database
 
 import (
 	"github.com/go-redis/redis/v8"
-	"github.com/isd-sgcu/rnkm65-file/src/config"
+	"github.com/isd-sgcu/rpkm66-file/src/config"
 	"github.com/pkg/errors"
 )
 

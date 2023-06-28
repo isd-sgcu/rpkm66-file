@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"github.com/isd-sgcu/rnkm65-file/src/constant/file"
+	"github.com/isd-sgcu/rpkm66-file/src/constant/file"
 	"strings"
 	"time"
 )

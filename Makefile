@@ -1,3 +1,6 @@
+proto:
+	find . -name *.proto -exec protoc --proto_path=proto --go_out=. --go-grpc_out=. {} \;
+
 test:
 	go vet ./...
 	go test  -v -coverpkg ./src/app/... -coverprofile coverage.out -covermode count ./src/app/...

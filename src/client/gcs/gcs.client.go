@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"cloud.google.com/go/storage"
 	"context"
-	"github.com/isd-sgcu/rnkm65-file/src/config"
+	"github.com/isd-sgcu/rpkm66-file/src/config"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/api/option"

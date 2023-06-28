@@ -1,7 +1,7 @@
 package cache
 
 import (
-	dto "github.com/isd-sgcu/rnkm65-file/src/app/dto/file"
+	dto "github.com/isd-sgcu/rpkm66-file/src/app/dto/file"
 	"github.com/stretchr/testify/mock"
 )
 
