@@ -37,6 +37,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup cred
+        shell: bash
+        env:
+          GO_PROTO_DEPLOY_KEY: ${{ secrets.GO_PROTO_DEPLOY_KEY }}
+        run: |
+          mkdir -p /home/runner/.ssh
+          chmod 700 /home/runner/.ssh
+          echo $GO_PROTO_DEPLOY_KEY > /home/runner/.ssh/id_rsa
+          wc -l /home/runner/.ssh/id_rsa
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
@@ -46,5 +56,5 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }},${{ env.IMAGE_NAME }}:latest
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
-          secrets: |
-            "sshKey=${{ secrets.GO_PROTO_DEPLOY_KEY }}"
+          secret-files: |
+            "sshKey=/home/runner/.ssh/id_rsa"
