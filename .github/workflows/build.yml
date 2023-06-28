@@ -45,8 +45,8 @@ jobs:
         run: |
           mkdir -p /home/runner/.ssh
           chmod 700 /home/runner/.ssh
-          echo $GO_PROTO_DEPLOY_KEY
-          echo $GO_PROTO_DEPLOY_KEY > /home/runner/.ssh/id_rsa
+          IFS='' echo $GO_PROTO_DEPLOY_KEY
+          IFS='' echo $GO_PROTO_DEPLOY_KEY > /home/runner/.ssh/id_rsa
           wc -l /home/runner/.ssh/id_rsa
 
       - name: Build and Push Docker Image
