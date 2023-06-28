@@ -27,8 +27,3 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Compile proto file
 1. Run `make proto`
-
-### TODO
-- restructure pkg (use `Service` & `serviceImpl` pattern)
-- add wrapper around `grpc` service
-- rename model to entity
