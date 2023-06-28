@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/isd-sgcu/rpkm66-file/config"
+	"github.com/isd-sgcu/rpkm66-file/cfgldr"
 	"github.com/isd-sgcu/rpkm66-file/constant/file"
 	dto "github.com/isd-sgcu/rpkm66-file/internal/dto/file"
 	model "github.com/isd-sgcu/rpkm66-file/internal/model/file"
@@ -17,7 +17,7 @@ import (
 
 type Service struct {
 	proto.UnimplementedFileServiceServer
-	conf       config.GCS
+	conf       cfgldr.GCS
 	ttl        int
 	client     IClient
 	repository IRepository
@@ -40,7 +40,7 @@ type ICacheRepository interface {
 	GetCache(string, interface{}) error
 }
 
-func NewService(conf config.GCS, ttl int, client IClient, repository IRepository, cacheRepo ICacheRepository) *Service {
+func NewService(conf cfgldr.GCS, ttl int, client IClient, repository IRepository, cacheRepo ICacheRepository) *Service {
 	return &Service{
 		conf:       conf,
 		ttl:        ttl,

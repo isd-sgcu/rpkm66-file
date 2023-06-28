@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/isd-sgcu/rpkm66-file/cfgldr"
 	gcsClt "github.com/isd-sgcu/rpkm66-file/client/gcs"
-	"github.com/isd-sgcu/rpkm66-file/config"
 	"github.com/isd-sgcu/rpkm66-file/database"
 	proto "github.com/isd-sgcu/rpkm66-file/internal/proto/rpkm66/file/file/v1"
 	"github.com/isd-sgcu/rpkm66-file/internal/repository/cache"
@@ -81,7 +81,7 @@ func gracefulShutdown(ctx context.Context, timeout time.Duration, ops map[string
 }
 
 func main() {
-	conf, err := config.LoadConfig()
+	conf, err := cfgldr.LoadConfig()
 	if err != nil {
 		log.Fatal().
 			Err(err).

@@ -1,9 +1,10 @@
-package config
+package cfgldr
 
 import (
+	"io/ioutil"
+
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
-	"io/ioutil"
 )
 
 type GCS struct {

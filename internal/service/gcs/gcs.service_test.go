@@ -8,7 +8,7 @@ import (
 
 	"github.com/bxcodec/faker/v4"
 	"github.com/go-redis/redis/v8"
-	"github.com/isd-sgcu/rpkm66-file/config"
+	"github.com/isd-sgcu/rpkm66-file/cfgldr"
 	dto "github.com/isd-sgcu/rpkm66-file/internal/dto/file"
 	"github.com/isd-sgcu/rpkm66-file/internal/model/file"
 	proto "github.com/isd-sgcu/rpkm66-file/internal/proto/rpkm66/file/file/v1"
@@ -24,7 +24,7 @@ import (
 
 type GCSServiceTest struct {
 	suite.Suite
-	conf      config.GCS
+	conf      cfgldr.GCS
 	filename  string
 	file      []byte
 	url       string
@@ -43,7 +43,7 @@ func (t *GCSServiceTest) SetupTest() {
 
 	t.url = faker.URL()
 
-	t.conf = config.GCS{
+	t.conf = cfgldr.GCS{
 		BucketName:          faker.Word(),
 		Secret:              faker.Word(),
 		ServiceAccountKey:   []byte(faker.Word()),

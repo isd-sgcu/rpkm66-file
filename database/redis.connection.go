@@ -2,11 +2,11 @@ package database
 
 import (
 	"github.com/go-redis/redis/v8"
-	"github.com/isd-sgcu/rpkm66-file/config"
+	"github.com/isd-sgcu/rpkm66-file/cfgldr"
 	"github.com/pkg/errors"
 )
 
-func InitRedisConnect(conf *config.Redis) (cache *redis.Client, err error) {
+func InitRedisConnect(conf *cfgldr.Redis) (cache *redis.Client, err error) {
 	cache = redis.NewClient(&redis.Options{
 		Addr: conf.Host,
 		DB:   1,

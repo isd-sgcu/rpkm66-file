@@ -7,19 +7,19 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
-	"github.com/isd-sgcu/rpkm66-file/config"
+	"github.com/isd-sgcu/rpkm66-file/cfgldr"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/api/option"
 )
 
 type Client struct {
-	conf config.GCS
+	conf cfgldr.GCS
 }
 
 const SignUrlExpiresIn = 15
 
-func NewClient(conf config.GCS) *Client {
+func NewClient(conf cfgldr.GCS) *Client {
 	return &Client{
 		conf: conf,
 	}
