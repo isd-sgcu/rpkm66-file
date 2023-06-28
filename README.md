@@ -8,7 +8,7 @@
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-- golang 1.18 or [later](https://go.dev)
+- golang 1.20 or [later](https://go.dev)
 - docker
 - makefile
 
@@ -27,3 +27,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Compile proto file
 1. Run `make proto`
+
+### TODO
+- restructure pkg (use `Service` & `serviceImpl` pattern)
+- add wrapper around `grpc` service
+- rename model to entity
