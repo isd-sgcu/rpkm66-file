@@ -13,7 +13,7 @@ ENV GOPRIVATE=github.com/isd-sgcu/*
 COPY go.mod go.sum ./
 
 # Download dependencies
-RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go mod download
+RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true cat /root/.ssh/id_rsa && wc -l /root/.ssh/id_rsa && go mod download
 
 # Copy the source code
 COPY . .
