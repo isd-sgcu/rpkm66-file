@@ -11,6 +11,23 @@ These instructions will get you a copy of the project up and running on your loc
 - golang 1.20 or [later](https://go.dev)
 - docker
 - makefile
+- protoc
+Linux
+```sh
+apt install -y protobuf-compiler
+```
+Mac
+```sh
+brew install protobuf
+```
+- protoc-gen-go
+```sh
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31
+```
+- protoc-gen-go-grpc
+```sh
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3
+```
 
 ### Installing
 1. Clone the project from [RNKM65 File](https://github.com/isd-sgcu/rpkm66-file)
