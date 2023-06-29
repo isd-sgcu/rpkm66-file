@@ -40,11 +40,9 @@ jobs:
       - name: Setup cred
         shell: bash
         env:
-          GO_PROTO_DEPLOY_KEY: ${{ secrets.GO_PROTO_DEPLOY_KEY }}
+          NETRC_CONFIG: ${{ secrets.NETRC_CONFIG }}
         run: |
-          mkdir -p /home/runner/.ssh
-          chmod 700 /home/runner/.ssh
-          echo "$GO_PROTO_DEPLOY_KEY" > /home/runner/.ssh/id_rsa
+          echo "$NETRC_CONFIG" > /home/runner/.netrc
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
@@ -55,7 +53,7 @@ jobs:
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
           secret-files: |
-            "sshKey=/home/runner/.ssh/id_rsa"
+            "netrcConf=/home/runner/.netrc"
 
   deploy:
     name: Deploy to deploys.app

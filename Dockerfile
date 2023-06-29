@@ -5,21 +5,19 @@ FROM golang:1.20.5-bullseye as base
 WORKDIR /app
 
 # Setup credential
-RUN git config --global url.ssh://git@github.com/.insteadOf https://github.com/ && mkdir /root/.ssh && chmod 700 /root/.ssh && ssh-keyscan github.com >> /root/.ssh/known_hosts
-
 ENV GOPRIVATE=github.com/isd-sgcu/*
 
 # Copy go.mod and go.sum files
 COPY go.mod go.sum ./
 
 # Download dependencies
-RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go mod download
+RUN --mount=type=secret,id=netrcConf,target=/root/.netrc,required=true go mod download
 
 # Copy the source code
 COPY . .
 
 # Build the application
-RUN --mount=type=secret,id=sshKey,target=/root/.ssh/id_rsa,required=true go build -o server ./cmd/main.go
+RUN --mount=type=secret,id=netrcConf,target=/root/.netrc,required=true go build -o server ./cmd/main.go
 # Create master image
 FROM alpine AS master
 
