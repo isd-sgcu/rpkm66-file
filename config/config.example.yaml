@@ -1,5 +1,5 @@
 app:
-  port: 3003
+  port: 3000
   debug: true
   cache_ttl: 900
   max_file_size: 10
@@ -11,8 +11,8 @@ gcs:
 
 database:
   host: localhost
-  port: 3306
-  name: rnkm-db
+  port: 5432
+  name: rpkm-db
   username: root
   password: root
 
