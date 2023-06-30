@@ -1,14 +1,18 @@
 package database
 
 import (
+	"fmt"
+
 	"github.com/go-redis/redis/v8"
 	"github.com/isd-sgcu/rpkm66-file/cfgldr"
 	"github.com/pkg/errors"
 )
 
 func InitRedisConnect(conf *cfgldr.Redis) (cache *redis.Client, err error) {
+	addr := fmt.Sprintf("%s:%s", conf.Host, conf.Port)
+
 	cache = redis.NewClient(&redis.Options{
-		Addr:     conf.Host,
+		Addr:     addr,
 		Password: conf.Password,
 		DB:       conf.Dbnum,
 	})

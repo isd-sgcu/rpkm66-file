@@ -16,7 +16,7 @@
 # vendor/
 
 # config file
-config.yaml
+config.toml
 gcs-service-account.json
 gcs-private-key.pem
 .env
