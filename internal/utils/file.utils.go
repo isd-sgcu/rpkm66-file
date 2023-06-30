@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/isd-sgcu/rpkm66-file/constant/file"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func GetObjectName(filename string, secret string, fileType file.Type) (string, error) {
@@ -20,6 +22,6 @@ func GetObjectName(filename string, secret string, fileType file.Type) (string, 
 	case file.IMAGE:
 		return fmt.Sprintf("image-%s-%d-%s", filename, time.Now().Unix(), hashed), nil
 	default:
-		return "", nil
+		return "", status.Error(codes.InvalidArgument, "Invalid file type")
 	}
 }
