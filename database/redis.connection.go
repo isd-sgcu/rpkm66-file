@@ -8,8 +8,9 @@ import (
 
 func InitRedisConnect(conf *cfgldr.Redis) (cache *redis.Client, err error) {
 	cache = redis.NewClient(&redis.Options{
-		Addr: conf.Host,
-		DB:   1,
+		Addr:     conf.Host,
+		Password: conf.Password,
+		DB:       conf.Dbnum,
 	})
 
 	if cache == nil {
