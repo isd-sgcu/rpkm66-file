@@ -9,7 +9,7 @@ import (
 )
 
 func InitRedisConnect(conf *cfgldr.Redis) (cache *redis.Client, err error) {
-	addr := fmt.Sprintf("%s:%s", conf.Host, conf.Port)
+	addr := fmt.Sprintf("%s:%d", conf.Host, conf.Port)
 
 	cache = redis.NewClient(&redis.Options{
 		Addr:     addr,
