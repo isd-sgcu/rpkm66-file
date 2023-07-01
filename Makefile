@@ -1,5 +1,5 @@
 proto:
-	find . -name *.proto -exec protoc --proto_path=proto --go_out=. --go-grpc_out=. {} \;
+	find . -name *.proto -exec protoc --proto_path=proto --go_out=internal/proto --go-grpc_out=internal/proto {} \;
 
 test:
 	go vet ./...
