@@ -35,4 +35,3 @@ EXPOSE 3000
 
 # Run the application
 ENTRYPOINT ["./server"]
-
