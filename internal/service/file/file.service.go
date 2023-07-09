@@ -114,6 +114,11 @@ func (s *serviceImpl) GetSignedUrl(_ context.Context, req *proto.GetSignedUrlReq
 	cachedFile := &dto.CacheFile{}
 	err := s.cacheRepo.GetCache(req.UserId, cachedFile)
 	if err == nil {
+		log.Info().
+			Err(err).
+			Str("module", "get signed url").
+			Str("user_id", req.UserId).
+			Msg("Get file url from cache")
 		return &proto.GetSignedUrlResponse{Url: cachedFile.Url}, nil
 	}
 
